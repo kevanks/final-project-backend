@@ -1,14 +1,11 @@
 const Client = require('pg').Client;
 
-const dbConfig = {
-  connectionString: 'postgresql://localhost5432/final_project_api',
-}
-
-if(process.env.DATABASE_URL){
-  dbConfig.ssl = { rejectUnauthorized: false }
-  dbConfig.connectionString = process.env.DATABASE_URL
-}
-
-const client = new Client(dbConfig)
+const client = new Client({
+  user: "postgres",
+  password: "admin1234",
+  host: "localhost",
+  port: 5432,
+  database: "final_project_api"
+});
 
 module.exports = client;
