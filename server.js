@@ -1,8 +1,8 @@
 // dependencies
-const express = require("express");
-const cors = require("cors");
+const express = require('express');
 const app = express();
-const client = require('./postgres.js');
+const cors = require('cors');
+const pool = require('./postgres.js');
 
 // middleware
 app.use(cors());
@@ -13,23 +13,27 @@ app.use(express.json());
 // create
 app.post('/movies', async (req, res) => {
   try {
-    const title = req.body
-    const newMovie = await client.query(`INSERT INTO movies (title) VALUES (${title}) RETURNING *`)
-    res.json(newMovie.rows)
+    const { title, year, director, genre, rating, rank, comments } = req.body;
+    const newMovie = await pool.query(`INSERT INTO movies (title, year, director, genre, rating, rank, comments) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`, [title, year, director, genre, rating, rank, comments]);
+    res.json(newMovie.rows);
   } catch (err) {
-    log(err.message)
+    console.log(err.message);
   }
 })
 
+
 // show
-// app.get('/movies', async (req, res) => {
-//     client.query('SELECT * FROM people ORDER BY id ASC;', (err, results) => {
-//         res.json(results.rows)
-//     });
-// });
+app.get('/movies', async (req, res) => {
+  try {
+    const allMovies = await pool.query("SELECT * FROM movies");
+    res.json(allMovies.rows)
+  } catch (err) {
+    console.log(err.message);
+  }
+})
 
 
 
-app.listen(process.env.PORT || 5000, () => {
+app.listen(5000, () => {
   console.log('Listening...');
 })
