@@ -11,3 +11,4 @@
 # 1/12
 - Started building routes in controller file
 - Trying to get my routes working having trouble with it
+- Got create, show, update, delete routes working
