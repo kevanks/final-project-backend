@@ -12,3 +12,8 @@
 - Started building routes in controller file
 - Trying to get my routes working having trouble with it
 - Got create, show, update, delete routes working
+# 1/13
+- Created GitHub repo for frontend
+- Created my react app
+- Started building basics for frontend
+- Added bootstrap to my app

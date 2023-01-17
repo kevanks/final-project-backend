@@ -13,8 +13,8 @@ app.use(express.json());
 // create a movie
 app.post('/movies', async (req, res) => {
   try {
-    const { title, year, director, genre, rating, rank, comments } = req.body;
-    const newMovie = await pool.query("INSERT INTO movies (title, year, director, genre, rating, rank, comments) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [title, year, director, genre, rating, rank, comments]);
+    const { title, year, director, genre, rating, rank, comments, imgurl } = req.body;
+    const newMovie = await pool.query("INSERT INTO movies (title, year, director, genre, rating, rank, comments, imgurl) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *", [title, year, director, genre, rating, rank, comments, imgurl]);
     res.json(newMovie.rows);
   } catch (err) {
     console.log(err.message);
@@ -24,7 +24,7 @@ app.post('/movies', async (req, res) => {
 // show all movies
 app.get('/movies', async (req, res) => {
   try {
-    const allMovies = await pool.query("SELECT * FROM movies");
+    const allMovies = await pool.query("SELECT * FROM movies ORDER BY rank ASC");
     res.json(allMovies.rows)
   } catch (err) {
     console.log(err.message);
@@ -36,8 +36,8 @@ app.get('/movies', async (req, res) => {
 app.put('/movies/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, year, director, genre, rating, rank, comments } = req.body;
-    const updateMovie = await pool.query("UPDATE movies SET title = $1, year = $2, director = $3, genre = $4, rating = $5, rank = $6, comments = $7 WHERE id = $8", [title, year, director, genre, rating, rank, comments, id])
+    const { title, year, director, genre, rating, rank, comments, imgurl } = req.body;
+    const updateMovie = await pool.query("UPDATE movies SET title = $1, year = $2, director = $3, genre = $4, rating = $5, rank = $6, comments = $7, imgurl = $8 WHERE id = $9", [title, year, director, genre, rating, rank, comments, imgurl, id])
     res.json("Movie was updated")
   } catch (err) {
     console.log(err.message);
