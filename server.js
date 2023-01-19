@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const pool = require('./postgres.js');
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcrypt')
 const PORT = process.env.PORT || 5000
 
 
@@ -25,7 +25,7 @@ app.post('/users/register', async (req, res) => {
     hashedPassword = await bcrypt.hash(req.body.password, 10)
     pool.query("SELECT * FROM users WHERE email = $1", [email], async (err, results) => {
       if (err) {
-        throw err
+        console.log(err.message);
       }
       console.log(results.rows);
       if(results.rows.length > 0) {
@@ -41,6 +41,37 @@ app.post('/users/register', async (req, res) => {
 })
 
 // login user
+app.post('/users/login', async (req, res) => {
+  try {
+    const { email, password } = req.body
+    pool.query("SELECT * FROM users WHERE email = $1", [email], async (err, results) => {
+      if (err) {
+        console.log(err.message);
+      }
+      if (results.rows[0].email === email) {
+        if (bcrypt.compareSync(req.body.password, results.rows[0].password)) {
+          res.json("logged in")
+        } else {
+          res.json("wrong password")
+        }
+      }
+
+
+    })
+  } catch (err) {
+    console.log(err.message);
+  }
+})
+
+// get all users
+app.get('/users', async (req, res) => {
+  try {
+    const allUsers = await pool.query("SELECT * FROM users")
+    res.json(allUsers.rows)
+  } catch (err) {
+    console.log(err.message);
+  }
+})
 
 
 
@@ -48,10 +79,7 @@ app.post('/users/register', async (req, res) => {
 
 
 
-
-
-
-
+// movie routes
 // create a movie
 app.post('/movies', async (req, res) => {
   try {
@@ -68,6 +96,17 @@ app.get('/movies', async (req, res) => {
   try {
     const allMovies = await pool.query("SELECT * FROM movies ORDER BY rank ASC");
     res.json(allMovies.rows)
+  } catch (err) {
+    console.log(err.message);
+  }
+})
+
+// show 1 movie
+app.get('/movies/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    const oneMovie = await pool.query("SELECT * FROM movies WHERE id = $1", [id]);
+    res.json(oneMovie.rows)
   } catch (err) {
     console.log(err.message);
   }
