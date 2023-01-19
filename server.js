@@ -3,17 +3,55 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const pool = require('./postgres.js');
+const bcrypt = require('bcryptjs')
 const PORT = process.env.PORT || 5000
+
+
 
 
 
 // middleware
 app.use(cors());
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: false }))
 
 
 // routes
+// users
+// create new user
+app.post('/users/register', async (req, res) => {
+  try {
+    const { email, username, password } = req.body
+    hashedPassword = await bcrypt.hash(req.body.password, 10)
+    pool.query("SELECT * FROM users WHERE email = $1", [email], async (err, results) => {
+      if (err) {
+        throw err
+      }
+      console.log(results.rows);
+      if(results.rows.length > 0) {
+        res.json("user is already created")
+      } else {
+        const newUser = await pool.query("INSERT INTO users (email, username, password) VALUES ($1, $2, $3) RETURNING *", [email, username, hashedPassword])
+        res.json(newUser.rows)
+      }
+    })
+  } catch (err) {
+    console.log(err.message);
+  }
+})
+
+// login user
+
+
+
+
+
+
+
+
+
+
+
 // create a movie
 app.post('/movies', async (req, res) => {
   try {
@@ -58,6 +96,8 @@ app.delete('/movies/:id', async (req, res) => {
     console.log(err.message);
   }
 })
+
+
 
 app.listen(PORT, () => {
   console.log('Listening...');
