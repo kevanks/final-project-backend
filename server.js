@@ -50,13 +50,11 @@ app.post('/users/login', async (req, res) => {
       }
       if (results.rows[0].email === email) {
         if (bcrypt.compareSync(req.body.password, results.rows[0].password)) {
-          res.json("logged in")
+          res.json(results.rows)
         } else {
-          res.json("wrong password")
+          res.json("invalid password")
         }
       }
-
-
     })
   } catch (err) {
     console.log(err.message);
