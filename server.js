@@ -81,8 +81,8 @@ app.get('/users', async (req, res) => {
 // create a movie
 app.post('/movies', async (req, res) => {
   try {
-    const { title, year, director, genre, rating, rank, comments, imgurl } = req.body;
-    const newMovie = await pool.query("INSERT INTO movies (title, year, director, genre, rating, rank, comments, imgurl) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *", [title, year, director, genre, rating, rank, comments, imgurl]);
+    const { title, year, director, genre, rating, rank, comments, imgurl, email } = req.body;
+    const newMovie = await pool.query("INSERT INTO movies (title, year, director, genre, rating, rank, comments, imgurl, email) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *", [title, year, director, genre, rating, rank, comments, imgurl, email]);
     res.json(newMovie.rows);
   } catch (err) {
     console.log(err.message);
@@ -99,11 +99,23 @@ app.get('/movies', async (req, res) => {
   }
 })
 
+
+// show all movies from one user
+app.get('/movies/user/:email', async (req,res) => {
+  try {
+    const { email } = req.params
+    const userMovies = await pool.query("SELECT * FROM movies WHERE email = $1 ORDER BY rank ASC", [email])
+    res.json(userMovies.rows)
+  } catch (err) {
+    console.log(err.message);
+  }
+})
+
 // show 1 movie
 app.get('/movies/:id', async (req, res) => {
   try {
     const { id } = req.params
-    const oneMovie = await pool.query("SELECT * FROM movies WHERE id = $1", [id]);
+    const oneMovie = await pool.query("SELECT * FROM movies WHERE id = $1", [id])
     res.json(oneMovie.rows)
   } catch (err) {
     console.log(err.message);
