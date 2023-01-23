@@ -92,7 +92,7 @@ app.post('/movies', async (req, res) => {
 // show all movies
 app.get('/movies', async (req, res) => {
   try {
-    const allMovies = await pool.query("SELECT * FROM movies ORDER BY rank ASC");
+    const allMovies = await pool.query("SELECT * FROM movies ORDER BY id ASC");
     res.json(allMovies.rows)
   } catch (err) {
     console.log(err.message);
