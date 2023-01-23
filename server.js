@@ -48,7 +48,7 @@ app.post('/users/login', async (req, res) => {
       if (err) {
         console.log(err.message);
       }
-      if (results.rows[0].email === email) {
+      if (results.rows[0].email === req.body.email) {
         if (bcrypt.compareSync(req.body.password, results.rows[0].password)) {
           res.json(results.rows)
         } else {
@@ -92,7 +92,7 @@ app.post('/movies', async (req, res) => {
 // show all movies
 app.get('/movies', async (req, res) => {
   try {
-    const allMovies = await pool.query("SELECT * FROM movies ORDER BY id ASC");
+    const allMovies = await pool.query("SELECT * FROM movies ORDER BY rank ASC");
     res.json(allMovies.rows)
   } catch (err) {
     console.log(err.message);
