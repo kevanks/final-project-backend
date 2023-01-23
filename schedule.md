@@ -28,8 +28,8 @@
 # 1/17
 - Got the show and delete functions working on the frontend
 - Got the edit function on frontend working and added modal for it too
-- Successfully launched backend on heroku
-- Successfully launched frontend on heroku
+- Successfully launched backend on Heroku
+- Successfully launched frontend on Heroku
 - Added new column to my postgres table to display images of movies (forgot to add it initially)
 # 1/18
 - Began researching how to add user auth to a PERN stack
@@ -43,3 +43,16 @@
 - Built login feature on the frontend that works with a modal
 - Built register feature on the frontend that works also with its own modal so users can now login and register to my app
 # 1/20
+- Fixed some bugs I had with the login and register features
+- Updated the backend with a new route so users can see only the movies they added
+- Struggled with getting the frontend to show only certain users movies
+- Did some light styling
+# 1/21
+- Continued to struggle with users only seeing the movies they've added
+- Added sort of a home page that users will be brought to when they first open up the app
+- Fixed more minor bugs of buttons and placements and where things are placed
+# 1/22
+- Finally got the users to only see the movies they've added
+- Set it so all the movies in the db are displayed on the main screen when the user first gets on the app before they login
+- Deployed both my backend and frontend to Heroku again with the final updates
+- Struggled with deploying backend but then realized after many hours that I didn't update my postgres on the Heroku so I did that and then everything worked perfectly
